@@ -2,28 +2,35 @@ const express = require("express");
 const uuid = require("uuid")
 const mongoose = require("mongoose");
 // const taskRoute = require()
-
+const taskModel = require("../Models/tasks")
 
 
 require("dotenv").config()
 
 
-
 const router = express.Router;
 
 
-let tasks = [];
-
 //as per Question: creating a new task
-router.post("/v1/tasks", (req, res) => {
-    const { title } = req.body;
-    const newTask = {
-        id: uuid.v4(),
-        title,
-        is_completed: false,
-    };
-    tasks.push(newTask);
-    res.status(201).json({ id: newTask.id });
+router.post("/", (req, res) => {
+    const { tasks } = req.body;
+    try {
+        if (Array.isArray(tasks)) {
+            const createTasks = taskModel.create(tasks)
+            const id = createTasks.map(takd => ({ id: task._id }))
+            res.status(201).json({ tasks: id })
+        } else {
+            const { title, is_completed } = req.body
+            const newTask = taskModel.create({ title, is_completed })
+            res.status(201).json({ _id: newTask._id })
+        }
+    } catch (err) {
+        console.log(err){
+            res.status(500).json({ error: "failed to create task" })
+        }
+    }
+
+
 });
 
 //List all task that is created

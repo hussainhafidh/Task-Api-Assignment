@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Server = require('se')
+
 
 const app = express();
+const mongodb_URI = process.env.mongodb_URI
 
 app.use(express.json());
 
